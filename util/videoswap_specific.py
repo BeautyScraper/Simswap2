@@ -163,7 +163,10 @@ def video_swap(video_path, id_vetor,specific_person_id_nonorm,id_thres, swap_mod
 
     if not no_audio:
         clips = clips.set_audio(video_audio_clip)
-
+    # import pdb;pdb.set_trace()
+    if Path(save_path).suffix != '.mp4':
+        save_path = str(Path(save_path).with_suffix('.mp4'))
+        
 
     clips.write_videofile(save_path,audio_codec='aac')
     shutil.rmtree(temp_results_dir)
