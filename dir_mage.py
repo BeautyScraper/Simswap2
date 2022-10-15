@@ -87,7 +87,7 @@ def single_src_dir_dst(src_img_file_path, targetDir, outDir,count_limit = -1):
         latend_id = model.netArc(img_id_downsample)
         latend_id = F.normalize(latend_id, p=2, dim=1)
 
-        img_dir_swap(targetDir, latend_id, model, app, pic_apath.name,temp_results_dir=outDir,\
+        img_dir_swap(targetDir, latend_id * 1.5, model, app, pic_apath.name,temp_results_dir=outDir,\
             no_simswaplogo=opt.no_simswaplogo,use_mask=opt.use_mask,crop_size=crop_size,count=count_limit)
 
 def src_dir(indir,target_dir,output_dir, randomize_src_files = False,trc = -1,selected_src_count=-1):

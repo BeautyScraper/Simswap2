@@ -1,4 +1,5 @@
-import os 
+import os
+import re 
 import cv2
 import glob
 import torch
@@ -158,8 +159,18 @@ def video_swap(video_path, id_vetor,specific_person_id_nonorm,id_thres, swap_mod
     # image_filename_list = []
     path = os.path.join(temp_results_dir,'*.jpg')
     image_filenames = sorted(glob.glob(path))
-
-    clips = ImageSequenceClip(image_filenames,fps = fps)
+    try:
+        clips = ImageSequenceClip(image_filenames,fps = fps)
+    except Exception as e:
+        # import pdb;pdb.set_trace()
+        filename_template = 'frame_%s.jpg'
+        filepath_delete = Path(re.search('(?<=open `).*?(?=`)',str(e))[0])
+        i = int(re.search('(?<=frame_).*',filepath_delete.stem)[0])
+        for k in range(1,20):
+            # import pdb;pdb.set_trace()
+            filepath_delete.unlink()
+            filepath_delete = filepath_delete.parent / (filename_template % str(i+k).zfill(7))
+        print(e)
 
     if not no_audio:
         clips = clips.set_audio(video_audio_clip)
