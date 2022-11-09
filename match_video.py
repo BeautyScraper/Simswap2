@@ -13,6 +13,15 @@ from sophi_spec import single_src
 # def lcm(a, b): return abs(a * b) / fractions.gcd(a, b) if a and b else 0
 from options.test_options import TestOptions
 
+def frame_count(filename):
+    import cv2
+    video = cv2.VideoCapture(str(filename))
+
+    duration = video.get(cv2.CAP_PROP_POS_MSEC)
+    frame_count = video.get(cv2.CAP_PROP_FRAME_COUNT)
+
+    return frame_count
+
             
 if __name__ == "__main__":
     args = TestOptions().parse()
@@ -27,7 +36,8 @@ if __name__ == "__main__":
         # import pdb;pdb.set_trace()
         if tes_dir.is_dir():
             dstFileList = [x for x in tes_dir.glob('*.m[pk][4v]')]
-            shuffle(dstFileList)
+            dstFileList.sort(key=frame_count)
+            # shuffle(dstFileList)
             single_src(imgFIles,dstFileList,respath_g,testsrc_times=-1,delete_target_when_done=True)
             
     # setSrc_setDst(srcimgdir_g,dstvideodir_g,respath_g)
