@@ -13,16 +13,35 @@ from sophi_spec import single_src
 # def lcm(a, b): return abs(a * b) / fractions.gcd(a, b) if a and b else 0
 from options.test_options import TestOptions
 
+import moviepy.editor as mp
+
 def frame_count(filename):
     import cv2
     video = cv2.VideoCapture(str(filename))
 
-    duration = video.get(cv2.CAP_PROP_POS_MSEC)
+    # duration = video.get(cv2.CAP_PROP_POS_MSEC)
     frame_count = video.get(cv2.CAP_PROP_FRAME_COUNT)
 
     return frame_count
 
-            
+
+
+def split_video(file_path):
+    clip = mp.VideoFileClip(file_path)
+    if clip.duration > 300:  # 300 seconds = 5 minutes
+        start = 0
+        end = 300
+        while end < clip.duration:
+            new_clip = clip.subclip(start, end)
+            new_file_path = file_path[:-4] + f"_{start}-{end}.mp4"
+            new_clip.write_videofile(new_file_path)
+            start = end
+            end += 300
+    else:
+        print("Video is not over 5 minutes.")
+
+
+
 if __name__ == "__main__":
     args = TestOptions().parse()
 
