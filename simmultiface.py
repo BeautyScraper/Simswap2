@@ -342,12 +342,15 @@ def FSon_permutation(multisepcific_dir,imgfiles,result_dir,facesInImg,setfilecon
         swap_list = list(range(0,facesinsrcdir)) + [-1] * (facesInImg - facesinsrcdir)
         r = len(swap_list)
     else:
-        swap_list = list(range(0,facesinsrcdir)) 
+        swap_list = list(range(0,facesinsrcdir)) + [-1]  
         r = facesInImg
+    
     for swaplist in list(permutations(swap_list,r)):
         # print()
         assert len(swaplist) == facesInImg
         # import pdb;pdb.set_trace()
+        if not -1 in swaplist: # keep original face
+            continue
         checkCode = str(imgfiles)+'@[%s]' % str(swaplist)
         if checkCode in setfilecontent:
             continue
